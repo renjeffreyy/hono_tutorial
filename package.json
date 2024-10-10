@@ -9,9 +9,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "hono": "^4.6.3"
+    "@hono/zod-validator": "^0.4.1",
+    "hono": "^4.6.3",
+    "zod": "^3.23.8"
   },
-  "scripts":{
+  "scripts": {
     "start": "bun index.ts",
     "dev": "bun --watch index.ts"
   }

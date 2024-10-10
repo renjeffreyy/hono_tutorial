@@ -5,12 +5,12 @@ import { expensesRoute } from './routes/expenses'
 const app = new Hono()
 
 app.use(logger())
-app.route("/",expensesRoute)
 
 app.get("/test", c => {
     return c.json({"message": "testing!"})
 })
 
+app.route("/api/expenses",expensesRoute)
 
 
 export default app
