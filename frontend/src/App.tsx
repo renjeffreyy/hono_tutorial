@@ -1,30 +1,34 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "./components/ui/card";
 
-import { api } from "@/lib/api"
+import { useQuery } from "@tanstack/react-query";
 
+import { api } from "./lib/api";
 
+async function getTotalSpent() {
+  const res = await api.expenses["total-spent"].$get();
+  if (!res.ok) {
+    throw new Error("server error");
+  }
+  const data = await res.json();
+  return data;
+}
 
 function App() {
-  const [totalSpent, setTotalSpent] = useState(0)
+  const { isPending, error, data } = useQuery({
+    queryKey: ["get-total-spent"],
+    queryFn: getTotalSpent,
+  });
 
-  useEffect(()=>{
-    async function fetchTotal(){
-      const res = await api.expenses["total-spent"].$get()
-      const data = await res.json()
-      setTotalSpent(data.total)
-    }
-    fetchTotal()
-  },[])
+
+  if (error) return "An error has occured" + error.message;
 
   return (
     <Card className="w-[350px]">
@@ -32,11 +36,9 @@ function App() {
         <CardTitle>Total Spent</CardTitle>
         <CardDescription>The total ammount spent</CardDescription>
       </CardHeader>
-      <CardContent>
-       {totalSpent}
-      </CardContent>
+      <CardContent>{ isPending ? "..." : data.total}</CardContent>
     </Card>
-  )
+  );
 }
 
-export default App
+export default App;
