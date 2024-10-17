@@ -58,7 +58,6 @@ export const expensesRoute = new Hono()
         return c.json({expense})
     })
     .get("/total-spent", async (c) => {
-        await new Promise((r)=> setTimeout(r,2000))
         const total = fakeExpense.reduce((acc, expense) => acc + expense.amount,0)
         return c.json({total})
     })
